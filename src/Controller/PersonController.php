@@ -20,16 +20,6 @@ class PersonController extends AbstractController
      */
     public function index(PersonRepository $personRepository): Response
     {
-        return $this->render('person/index.html.twig', [
-            'people' => $personRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/json/", name="person_index", methods={"GET"})
-     */
-    public function indexJson(PersonRepository $personRepository): Response
-    {
         $persons = $personRepository->findAll();
         $result = array();
         if(!$persons){
@@ -48,13 +38,15 @@ class PersonController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="person_new", methods={"GET","POST"})
+     * @Route("/new", name="person_new", methods={"POST"})
      */
     public function new(Request $request): Response
     {
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
         $form->handleRequest($request);
+
+        printf($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -64,26 +56,15 @@ class PersonController extends AbstractController
             return $this->redirectToRoute('person_index');
         }
 
-        return $this->render('person/new.html.twig', [
-            'person' => $person,
-            'form' => $form->createView(),
-        ]);
+        $result [] = array('error' => 'Invalid form');
+
+        return $this->json($result, $status = 500, $headers = [], $context = []);
     }
 
     /**
      * @Route("/{id}", name="person_show", methods={"GET"})
      */
     public function show(Person $person): Response
-    {
-        return $this->render('person/show.html.twig', [
-            'person' => $person,
-        ]);
-    }
-
-    /**
-     * @Route("/json/{id}", name="person_show", methods={"GET"})
-     */
-    public function showJson(Person $person): Response
     {
         $result = array();
         if(!$person){
@@ -100,7 +81,7 @@ class PersonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="person_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="person_edit", methods={"POST"})
      */
     public function edit(Request $request, Person $person): Response
     {
