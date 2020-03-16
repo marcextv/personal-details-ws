@@ -38,27 +38,27 @@ class PersonController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="person_new", methods={"POST"})
+     * @Route("/", name="person_new", methods={"POST"})
      */
     public function new(Request $request): Response
     {
-        $person = new Person();
-        $form = $this->createForm(PersonType::class, $person);
-        $form->handleRequest($request);
-
-        printf($form);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($person);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('person_index');
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $lastName = $data['lastName'];
+        $email = $data['email'];
+        $ci = $data['ci'];
+        if (empty($name) || empty($lastName) || empty($email) || empty($ci)) {
+            throw new NotFoundHttpException('Expecting mandatory parameters!');
         }
-
-        $result [] = array('error' => 'Invalid form');
-
-        return $this->json($result, $status = 500, $headers = [], $context = []);
+        $person = new Person();
+        $person->setName($name);
+        $person->setLastName($lastName);
+        $person->setEmail($email);
+        $person->setCi($ci);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($person);
+        $entityManager->flush();
+        return $this->json(['status' => 'Person created!'], $status = 200, $headers = [], $context = []);
     }
 
     /**
@@ -81,23 +81,24 @@ class PersonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="person_edit", methods={"POST"})
+     * @Route("/{id}", name="person_edit", methods={"PUT"})
      */
     public function edit(Request $request, Person $person): Response
     {
-        $form = $this->createForm(PersonType::class, $person);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('person_index');
+        if(!$person){
+            return $this->json(['error' => 'There is not such a person'], $status = 500, $headers = [], $context = []); 
         }
-
-        return $this->render('person/edit.html.twig', [
-            'person' => $person,
-            'form' => $form->createView(),
-        ]);
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $lastName = $data['lastName'];
+        $email = $data['email'];
+        $ci = $data['ci'];
+        $person->setName(empty($name) ? $person->getName() : $name);
+        $person->setlastName(empty($lastName) ? $person->getLastName() : $lastName);
+        $person->setEmail(empty($email) ? $person->getEmail() : $email);
+        $person->setCi(empty($ci) ? $person->getCi() : $ci);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->json(['status' => 'Person updated!'], $status = 200, $headers = [], $context = []);
     }
 
     /**
@@ -105,12 +106,9 @@ class PersonController extends AbstractController
      */
     public function delete(Request $request, Person $person): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$person->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($person);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('person_index');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($person);
+        $entityManager->flush();
+        return $this->json(array('message' => 'Person was deleted'), $status = 200, $headers = [], $context = []);
     }
 }
