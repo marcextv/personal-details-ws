@@ -61,12 +61,11 @@ http://localhost:8000/
 
 ## Included Services
 
+Creates a new person.
 ```
 http://localhost:8000/person
 POST
 ```
-Creates a new person.
-
 ```
 //JSON Example
 {
@@ -77,23 +76,23 @@ Creates a new person.
 }
 ```
 
+Returns all person in JSON format.
 ```
 http://localhost:8000/person
 GET
 ```
-Returns all person in JSON format.
 
+Returns a person for id.
 ```
 http://localhost:8000/person/[id]
 GET
 ```
-Returns a person for id.
 
+Updates a person data based on id.
 ```
 http://localhost:8000/person/[id]
 PUT
 ```
-Updates a person data based on id.
 ```
 //JSON Example
 {
@@ -104,8 +103,8 @@ Updates a person data based on id.
 }
 ```
 
+Deletes a person by id.
 ```
 http://localhost:8000/person/[id]
 DELETE
 ```
-Deletes a person by id.
