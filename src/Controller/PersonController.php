@@ -34,7 +34,12 @@ class PersonController extends AbstractController
                 'ci' => $person->getCi()
             );
         }
-        return $this->json($result, $status = 200, $headers = [], $context = []);
+
+        return $this->json($result, $status = 200, 
+                            $headers = ['Content-Type' => 'application/json',
+                                        'Access-Control-Allow-Origin' => '*'
+                                        ], 
+                            $context = []);
     }
 
     /**
@@ -58,7 +63,11 @@ class PersonController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($person);
         $entityManager->flush();
-        return $this->json(['status' => 'Person created!'], $status = 200, $headers = [], $context = []);
+        return $this->json(['status' => 'Person created!'], $status = 200, 
+                            $headers = ['Content-Type' => 'application/json',
+                                        'Access-Control-Allow-Origin' => '*'
+                                        ],
+                            $context = []);
     }
 
     /**
@@ -77,7 +86,11 @@ class PersonController extends AbstractController
             'email' => $person->getEmail(),
             'ci' => $person->getCi()
         );
-        return $this->json($result, $status = 200, $headers = [], $context = []);
+        return $this->json($result, $status = 200, 
+                            $headers = ['Content-Type' => 'application/json',
+                                        'Access-Control-Allow-Origin' => '*'
+                                        ], 
+                            $context = []);
     }
 
     /**
@@ -98,7 +111,11 @@ class PersonController extends AbstractController
         $person->setEmail(empty($email) ? $person->getEmail() : $email);
         $person->setCi(empty($ci) ? $person->getCi() : $ci);
         $this->getDoctrine()->getManager()->flush();
-        return $this->json(['status' => 'Person updated!'], $status = 200, $headers = [], $context = []);
+        return $this->json(['status' => 'Person updated!'], $status = 200,
+                        $headers = ['Content-Type' => 'application/json',
+                                'Access-Control-Allow-Origin' => '*'
+                        ], 
+                        $context = []);
     }
 
     /**
@@ -109,6 +126,10 @@ class PersonController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($person);
         $entityManager->flush();
-        return $this->json(array('message' => 'Person was deleted'), $status = 200, $headers = [], $context = []);
+        return $this->json(array('message' => 'Person was deleted'), $status = 200, 
+                        $headers = ['Content-Type' => 'application/json',
+                                        'Access-Control-Allow-Origin' => '*'
+                                        ], 
+                        $context = []);
     }
 }
