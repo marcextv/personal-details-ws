@@ -2,7 +2,7 @@
 
 Personal Details Web Services is a example of how to create a simple CRUD with Symfony, connecting with a MySQL image.
 
-# What you need
+# What do you need
 
 
 You must have:
