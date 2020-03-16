@@ -2,7 +2,18 @@
 
 Personal Details Web Services is a example of how to create a simple CRUD with Symfony, connecting with a MySQL image.
 
-## data base setup
+# What you need
+
+
+You must have:
+
+- PHP 7.3
+- Symfony 4.12
+- Docker 19
+- Docker compose 1.23.2
+
+
+## Data base setup
 
 Install docker image with mysql database, this database contains a instance call mysql.development, and a database called personal-data:
 ```
