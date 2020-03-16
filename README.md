@@ -76,8 +76,7 @@ Creates a new person.
 ```
 http://localhost:8000/person
 POST
-```
-```
+
 //JSON Example
 {
   "name":"test",
@@ -87,7 +86,7 @@ POST
 }
 ```
 
-Returns all person in JSON format.
+Returns all people.
 ```
 http://localhost:8000/person
 GET
@@ -103,8 +102,7 @@ Updates a person data based on id.
 ```
 http://localhost:8000/person/[id]
 PUT
-```
-```
+
 //JSON Example
 {
   "name":"test12",
