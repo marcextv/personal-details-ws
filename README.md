@@ -4,7 +4,6 @@ Personal Details Web Services is a example of how to create a simple CRUD with S
 
 # What do you need
 
-
 You must have:
 
 - PHP 7.3
